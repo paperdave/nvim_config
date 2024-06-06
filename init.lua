@@ -1,11 +1,16 @@
-require("dave.remap")
-require("dave.set")
-vim.g.codeium_disable_bindings = 1;
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-	vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable" })
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
 vim.opt.rtp:prepend(lazypath)
+
 -- dependencies
 require("lazy").setup({
 	{'nvim-telescope/telescope.nvim', tag = '0.1.6', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -36,8 +41,10 @@ require("lazy").setup({
 	{'hrsh7th/cmp-nvim-lsp'},
 	{'hrsh7th/nvim-cmp'},
 	{'L3MON4D3/LuaSnip'},
-    {'supermaven-inc/supermaven-nvim'},
 });
+
+require("dave.remap")
+require("dave.set")
 
 local lsp = require('lsp-zero')
 lsp.preset("recommended");
@@ -86,23 +93,7 @@ cmp.setup({
   },
 })
 
-require("supermaven-nvim").setup({
-  keymaps = {
-    accept_suggestion = "<C-g>",
-    clear_suggestion = "<C-]>",
-    accept_word = "<C-j>",
-  },
-  ignore_filetypes = { },
-  color = {
-    -- suggestion_color = "#ffffff",
-    -- cterm = 244,
-  },
-  disable_inline_completion = false, -- disables inline completion for use with cmp
-  disable_keymaps = false -- disables built in keymaps for more manual control
-})
-
 require("catppuccin").setup({
 })
 
 vim.cmd.colorscheme "catppuccin"
-
